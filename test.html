@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style>
+      #list {
+        border: 1px solid #ccc;
+      }
+
+      #list tbody td {
+        border-right: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+        text-align: center;
+      }
+    </style>
+    <script src="./jquery-3.4.1.min.js"></script>
+    <script>
+      $(function() {
+        // 入口函数
+        $.getJSON('./list.php').then(data => {
+          var $tbody = $('<tbody>');
+          var html = '';
+          $.each(data, (i, book) => {
+            html += `
+              <tr>
+                <td>
+                  <input type="checkbox" name="list" />                 
+                </td>
+                <td>${i + 1}</td>
+                <td>${book.name}</td>
+                <td>${book.price}</td>
+                <td>${book.author}</td>
+              </tr>
+            `;
+          });
+          $tbody.html(html);
+          // $('#list').append($tbody);
+          $tbody.appendTo('#list');
+        });
+
+        // 全选 全不选
+        $('#checkAll').change(function() {
+          var $checkboxes = $('#list input[name=list]:checkbox');
+          // console.log($checkboxes);
+          $checkboxes.each((i, cb) => {
+            cb.checked = this.checked;
+          });
+        });
+
+        // 反选
+        $('#checkReverse').click(function() {
+          var $checkboxes = $('#list input[name=list]:checkbox');
+          $checkboxes.each((i, cb) => {
+            cb.checked = !cb.checked;
+          });
+        });
+        var $table = $('#list');
+        console.log($table instanceof $);
+        console.log($table instanceof $.fn.init);
+      });
+    </script>
+  </head>
+  <body>
+    <table id="list">
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" id="checkAll" />
+            <a href="javascript: void(0)" id="checkReverse">反选</a>
+          </th>
+          <th>序号</th>
+          <th>书名</th>
+          <th>价格</th>
+          <th>作者</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+</html>
